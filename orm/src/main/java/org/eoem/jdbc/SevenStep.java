@@ -6,7 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * jdbc查询数据库的七个步骤
+ */
 public class SevenStep {
+    
     public static List<Map<String,Object>> queryForList(){
         Connection connection = null;
         ResultSet rs = null;
