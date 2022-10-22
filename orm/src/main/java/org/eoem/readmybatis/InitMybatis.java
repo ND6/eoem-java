@@ -1,5 +1,6 @@
 package org.eoem.readmybatis;
 
+import lombok.var;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -17,18 +18,36 @@ import java.io.Reader;
  */
 public class InitMybatis {
     
-    SqlSession init() throws IOException {
+    SqlSession getSqlSession() throws IOException {
         
         String resource = "mybatis.cfg.xml";
-    
+        
         Reader reader = Resources.getResourceAsReader(resource);
-    
+        
         SqlSessionFactory ssf = new SqlSessionFactoryBuilder().build(reader);
-    
+        
         SqlSession session = ssf.openSession();
         
         return session;
     }
+    
+    void doOneQuery() throws IOException {
+        String resource = "mybatis.cfg.xml";
+        Reader reader = Resources.getResourceAsReader(resource);
+        SqlSessionFactory ssf = new SqlSessionFactoryBuilder().build(reader);
+        
+        SqlSession session = ssf.openSession();
+        
+        try {
+            var user = session.selectOne("User.selectUser", "1");
+            System.out.println(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+    
     
 }
 
