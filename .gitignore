@@ -16,7 +16,7 @@ logs
 
 ### IntelliJ IDEA ###
 .idea
-encodings.xml
+*/encodings.xml
 *.iws
 *.iml
 *.ipr
