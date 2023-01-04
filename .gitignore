@@ -16,10 +16,11 @@ logs
 
 ### IntelliJ IDEA ###
 .idea
-*/encodings.xml
 *.iws
 *.iml
 *.ipr
+/.settings/
+target
 
 ### NetBeans ###
 /nbproject/private/
@@ -35,4 +36,7 @@ build/
 .mvn
 mvnw
 mvnw.cmd
-HELP.md
+
+${LOG_HOME}
+
+
