@@ -4,18 +4,18 @@ import lombok.SneakyThrows;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.*;
 
 public class HowToFileIO {
     public static void main(String[] args) {
-    
+        testRandomAccessFile();
     }
     
     // ----------------------------------------------------------------
@@ -100,6 +100,54 @@ public class HowToFileIO {
             }
         } catch (IOException x) {
             System.out.println("caught exception: " + x);
+        }
+    }
+    
+    // 创建临时文件
+    public static void testCreateTemp() {
+        try {
+            Path tempFile = Files.createTempFile(null, ".myapp");
+            System.out.format("The temporary file" +
+                    " has been created: %s%n", tempFile);
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+    }
+    
+    // 随机访问文件
+    public static void testRandomAccessFile() {
+        Path file = Paths.get("xanadu.txt");
+        String s = "I was here!\n";
+        byte data[] = s.getBytes();
+        ByteBuffer out = ByteBuffer.wrap(data);
+        
+        ByteBuffer copy = ByteBuffer.allocate(12);
+        
+        try (FileChannel fc = (FileChannel.open(file, READ, WRITE))) {
+            // Read the first 12
+            // bytes of the file.
+            int nread;
+            do {
+                nread = fc.read(copy);
+            } while (nread != -1 && copy.hasRemaining());
+            
+            // Write "I was here!" at the beginning of the file.
+            fc.position(0);
+            while (out.hasRemaining())
+                fc.write(out);
+            out.rewind();
+            
+            // Move to the end of the file.  Copy the first 12 bytes to
+            // the end of the file.  Then write "I was here!" again.
+            long length = fc.size();
+            fc.position(length - 1);
+            copy.flip();
+            while (copy.hasRemaining())
+                fc.write(copy);
+            while (out.hasRemaining())
+                fc.write(out);
+        } catch (IOException x) {
+            System.out.println("I/O Exception: " + x);
         }
     }
 }
