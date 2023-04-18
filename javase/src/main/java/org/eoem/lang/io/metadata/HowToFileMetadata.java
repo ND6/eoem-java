@@ -6,8 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
-import java.nio.file.attribute.PosixFileAttributes;
-import java.nio.file.attribute.PosixFilePermissions;
 
 public class HowToFileMetadata {
     public static void main(String[] args) {
@@ -46,13 +44,6 @@ public class HowToFileMetadata {
             long currentTime = System.currentTimeMillis();
             FileTime ft = FileTime.fromMillis(currentTime);
             Files.setLastModifiedTime(file, ft);
-    
-            PosixFileAttributes posixFileAttributes =
-                    Files.readAttributes(file, PosixFileAttributes.class);
-            System.out.format("posixFileAttributes:%s %s %s%n",
-                    posixFileAttributes.owner().getName(),
-                    posixFileAttributes.group().getName(),
-                    PosixFilePermissions.toString(posixFileAttributes.permissions()));
     
         } catch (IOException e) {
             System.out.println(e);
