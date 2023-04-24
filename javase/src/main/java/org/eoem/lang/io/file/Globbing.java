@@ -35,7 +35,7 @@ public class Globbing {
         Path dir = Paths.get("javase/src/main/java/org/eoem/lang/io/file");
         Path path = Paths.get("javase/src/main/java/org/eoem/lang/io/file");
         DirectoryStream.Filter<Path> filter =
-                Files::isDirectory;
+                file -> (Files.isDirectory(file));
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, filter)) {
             for (Path entry : stream) {
                 System.out.println(entry.getFileName());
